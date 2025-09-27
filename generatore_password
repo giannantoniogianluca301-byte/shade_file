@@ -1,0 +1,8 @@
+import random
+import string
+a = int(input("quanti caratteri deve avare la tua password  "))
+caratteri = string.ascii_letters + string.digits + string.punctuation
+password = ''.join(random.choice(caratteri) for _ in range(a))
+print(password)
+
+    
