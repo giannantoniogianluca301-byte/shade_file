@@ -1,0 +1,58 @@
+import discord
+import random
+from discord.ext import commands
+
+# Impostazione degli intent
+intents = discord.Intents.default()
+intents.message_content = True
+
+# Creazione del bot
+bot = commands.Bot(command_prefix="", intents=discord.Intents.all())
+
+# Funzione per generare una password casuale
+def genera_password():
+    elementi = "+-/*!&$#?=@abcdefghijklnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+    password = "".join(random.choice(elementi) for _ in range(8))
+    return password
+
+# Funzione per generare un'emoji casuale
+def genera_emoji():
+    emoji = ["\U0001f600", "\U0001f642", "\U0001F606", "\U0001F923"]
+    return random.choice(emoji)
+
+# Evento: il bot è pronto
+@bot.event
+async def on_ready():
+    print(f"Bot connesso come {bot.user}")
+
+# Comando per pulire la chat
+@bot.command()
+async def pulisci(ctx):
+    await ctx.channel.purge()
+
+# Evento: gestione dei messaggi
+@bot.event
+async def on_message(message):
+    if message.author == bot.user:
+        return
+
+    if message.content.startswith('password'):
+        await message.channel.send(genera_password())
+
+    elif message.content.startswith('$ciao'):
+        await message.channel.send("Ciao!")
+
+    elif message.content.startswith('$arrivederci'):
+        await message.channel.send("\U0001f642")
+
+    elif message.content.startswith('emoji'):
+        await message.channel.send(genera_emoji())
+
+    else:
+        await message.channel.send("<:binaryshade:1426497628916551850>")
+
+    # Necessario per far funzionare anche i comandi (es. !pulisci)
+    await bot.process_commands(message)
+
+# Esegui il bot (sostituisci il token con uno sicuro!)
+bot.run("metti il TUO token")
